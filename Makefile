@@ -1,5 +1,10 @@
 BUILD_DIR:=build/
 
+all: $(BUILD_DIR)pluto.frm
+
+pluto.frm:
+	$(error "Go download the latest release or try make dl0.35")
+
 deps:
 	sudo apt-get install device-tree-compiler u-boot-tools coreutils wget
 
@@ -7,10 +12,8 @@ dl0.35:
 	wget https://github.com/analogdevicesinc/plutosdr-fw/releases/download/v0.35/plutosdr-fw-v0.35.zip && \
 	unzip plutosdr-fw-v0.35.zip
 
-pluto.frm:
-	echo "Go download the latest release or try `make dl0.35`"
-
 $(BUILD_DIR)FPGA $(BUILD_DIR)Ramdisk $(BUILD_DIR)Linux $(BUILD_DIR)zynq-pluto-sdr $(BUILD_DIR)zynq-pluto-sdr-revb $(BUILD_DIR)zynq-pluto-sdr-revc: pluto.frm
+	mkdir -p $(BUILD_DIR) && \
 	cd $(BUILD_DIR) && \
 	dtc -O dts ../pluto.frm | python3 ../extract_data_dts.py /dev/stdin
 
@@ -59,3 +62,9 @@ $(BUILD_DIR)rootfs.cpio: $(BUILD_DIR)rootfs.cpio.gz
 # 	cpio -id < ../rootfs.cpio
 
 .PHONY: dl0.35 extract-dtc extract
+
+clean:
+	rm -f pluto.dfu uboot-env.dfu boot.dfu boot.frm
+
+deepclean: clean
+	rm -f pluto.frm
