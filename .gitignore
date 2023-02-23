@@ -1,1 +1,9 @@
 *~
+build/**
+boot.dfu
+boot.frm
+pluto.dfu
+pluto.frm
+pluto.its
+plutosdr-fw-v0.35.zip
+uboot-env.dfu
